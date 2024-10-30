@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "config.h"
 
@@ -19,5 +18,5 @@ int main(int argc, char* argv[]) {
   for (int i = 2; i <= argc; i++) {
     new_argv[i] = argv[i - 1];
   }
-  return execvp(BOX, new_argv);
+  return execvp(new_argv[0], new_argv);
 }

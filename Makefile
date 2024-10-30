@@ -1,8 +1,8 @@
-
 TARGET32 := wine
-TARGET64 := wine64 wineserver
+TARGET64 := wine64
+TARGET_MIX := wineserver
 
-TARGET := $(TARGET32) $(TARGET64)
+TARGET := $(TARGET32) $(TARGET64) $(TARGET_MIX)
 
 BIN_PATH := $(PREFIX)/usr/local/bin
 BIN_FILE := $(TARGET:%=$(BIN_PATH)/%)
@@ -27,3 +27,6 @@ $(TARGET32): template.c
 
 $(TARGET64): template.c
 	$(CC) -DBOX64 -DPROG="$@" -O0 $< -o $@
+
+$(TARGET_MIX): template_mix.c
+	$(CC) -DBOXMIX -DPROG="$@" -O0 $< -o $@

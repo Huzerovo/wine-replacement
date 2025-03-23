@@ -17,10 +17,10 @@ int main(int argc, char *argv[]) {
   if (!winearch || strcmp(winearch, "win32") == 0) {
     // 默认使用32位的
     new_argv[0] = BOX86;
-    new_argv[1] = CONFIG_BIN32_PREFIX "/" xstr(PROG);
+    new_argv[1] = xstr(CONFIG_BIN32_PREFIX) "/" xstr(PROG);
   } else {
     new_argv[0] = BOX64;
-    new_argv[1] = CONFIG_BIN64_PREFIX "/" xstr(PROG);
+    new_argv[1] = xstr(CONFIG_BIN64_PREFIX) "/" xstr(PROG);
   }
 
   for (int i = 2; i <= argc; i++) {

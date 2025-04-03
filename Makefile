@@ -1,16 +1,15 @@
-TARGET32 := wine
-TARGET64 := wine64
-TARGET_MIX := wineserver
+BINARY := wine wineserver
+TARGET := $(addprefix target/, $(BINARY))
 
-TARGET := $(TARGET32) $(TARGET64) $(TARGET_MIX)
-
+bin_box86 := box86
+bin_box64 := box64
 opt32 := /opt/wine32
 opt64 := /opt/wine64
 prefix := /usr/local
 
 PREFIX := $(prefix)
 BIN_PATH := $(PREFIX)/bin
-BIN_FILE := $(TARGET:%=$(BIN_PATH)/%)
+BIN_FILE := $(addprefix $(BIN_PATH)/,$(BINARY))
 
 .PHONY: all
 all: $(TARGET)
@@ -27,11 +26,11 @@ install: $(TARGET)
 uninstall:
 	rm -f $(BIN_FILE)
 
-$(TARGET32): template.c
-	$(CC) -DBOX86 -DPROG="$@" -DOPT32="$(opt32)/bin" -DOPT64="$(opt64)/bin" -O0 $< -o $@
+.PHONY: target_dir
+target_dir:
+	@mkdir -p target
 
-$(TARGET64): template.c
-	$(CC) -DBOX64 -DPROG="$@" -DOPT32="$(opt32)/bin" -DOPT64="$(opt64)/bin" -O0 $< -o $@
+$(TARGET): target_dir $(TARGET:target/%=%)
 
-$(TARGET_MIX): template_mix.c
-	$(CC) -DBOXMIX -DPROG="$@" -DOPT32="$(opt32)/bin" -DOPT64="$(opt64)/bin" -O0 $< -o $@
+$(BINARY): template.c
+	$(CC) -DPROG="$@" -DBOX86="$(bin_box86)" -DBOX64="$(bin_box64)" -DOPT32="$(opt32)/bin" -DOPT64="$(opt64)/bin" -O2 $< -o target/$@
